@@ -1,107 +1,83 @@
-import pygame, sys
+import pygame, sys #impordib pygame ja sysi
 
 # värvid
-red = [255, 0, 0]
-green = [0, 255, 0]
-blue = [0, 0, 255]
-pink = [255, 153, 255]
-lGreen = [153, 255, 153]
-lBlue = [153, 204, 255]
+red = [255, 0, 0] #Anname värvi "red"
+green = [0, 255, 0] #Annab värvi "green"
+blue = [0, 0, 255] #Annab värvi "blue"
+pink = [255, 153, 255] #Annab värvi "pink"
+lGreen = [153, 255, 153] #Annab värvi "lGreen"
+lBlue = [153, 204, 255] #Annab värvi "lBlue"
 
 #ekraani seaded
-screenX = 640
-screenY = 480
-screen = pygame.display.set_mode([screenX, screenY])
-pygame.display.set_caption("Animeerimine")
-screen.fill(lBlue)
-clock = pygame.time.Clock()
+screenX = 640 #Annab ekraani X suuruse 640
+screenY = 480 #Annab ekraani Y suuruse 480
+screen = pygame.display.set_mode([screenX, screenY]) #Valmistab meile ette ekraani
+pygame.display.set_caption("Ping-pong") #Annab ekraanile nimeks Ping-pong
+screen.fill(lBlue) #Paneb ekraani taustaks värvi lBlue
+clock = pygame.time.Clock() #Anname meie mängule mingisuguse fps-i
 
 #graafika laadimine
-ball = pygame.image.load("ball.png")
+ball = pygame.image.load("ball.png") #Annab mängule teada, et on vaja laadida pilt nimega ball
 
 #kiirus ja asukoht
-posX, posY = 0, 0
-speedX, speedY = 3, 4
+posX, posY = 0, 0 #Palli põhiline asukoht
+speedX, speedY = 3, 4 #Palli kiirus
 
-gameover = False
-while not gameover:
-  #fps
-  clock.tick(60)
+gameover = False #Gameover on siin hetkel false
+while not gameover: #Kui hetkel gameover pole
+  clock.tick(60) #Meie mängu hetkene fps
 
-  #pildi lisamine ekraanile
-  screen.blit(ball, (posX, posY))
+  screen.blit(ball, (posX, posY)) #Lisame pildi ekraanile
 
-  posX += speedX
-  posY += speedY
+  posX += speedX #Kui posX on suurem kui speedX
+  posY += speedY #Kui posY on suurem kui speedY
 
-  #kui puudub ääri, siis muudab suunda
-  if posX > screenX - ball.get_rect().width or posX < 0:
-    speedX = -speedX
+  if posX > screenX - ball.get_rect().width or posX < 0: #Kui meie pall läheb vastu äärt, läheb ta teises suunas
+    speedX = -speedX #speedX on võrdne -speedX-ga
 
-  if posY > screenY - ball.get_rect().height or posY < 0:
-    speedY = -speedY
+  if posY > screenY - ball.get_rect().height or posY < 0: #Kui meie pall läheb jälle vastu äärt, läheb ta jälle teises suunas
+    speedY = -speedY #speedY on võrdne -speedY-ga
 
-  #graafika kuvamine ekraanil
-  pygame.display.flip()
-  screen.fill(lBlue)
+  pygame.display.flip() #Värskendab ekraani
+  screen.fill(lBlue) #Paneb uuesti taustaks helesinise
 
-# object current co-ordinates
-x = 200
-y = 420
+x = 200 #Hetekese objekti X-koordinaat
+y = 420 #Hetekese objekti Y-koordinaat
 
-# graafika laadimine
-alus = pygame.image.load("pad.png").convert()
+alus = pygame.image.load("pad.png").convert() #Laeme sisse aluse
 
-rect = alus.get_rect()
-rect.center = (x,y)
+rect = alus.get_rect() #Lisame meie alusele võimaluse tunnetada, kui pall läheb selle vastu
+rect.center = (x,y) #See on meie aluse keskne koht
 
-# dimensions of the object
-width = 120
-height = 20
+width = 120 #Aluse pikkus
+height = 20 #Aluse kõrgus
 
-# velocity / speed of movement
-vel = 10
+vel = 10 #Aluse kiirus
 
-# Indicates pygame is running
-run = True
+run = True #Näitab, et mäng jookseb
 
-# infinite loop
-while run:
-    # creates time delay of 10ms
-    pygame.time.delay(10)
+while run: #Kui programm samal ajal jookseb
+    pygame.time.delay(10) # Teeb ajale 10ms delay
 
-    # iterate over the list of Event objects
     # that was returned by pygame.event.get() method.
-    for event in pygame.event.get():
+    for event in pygame.event.get(): #Kui evendis on vaja saada pygame.event
 
-        # if event object type is QUIT
-        # then quitting the pygame
-        # and program both.
-        if event.type == pygame.QUIT:
-            # it will make exit the while loop
-            run = False
-    # stores keys pressed
-    keys = pygame.key.get_pressed()
+        if event.type == pygame.QUIT: #Kui selle mängus toimuva asja tüüp on Quit
+            run = False #Paneb mängu kinni
+    keys = pygame.key.get_pressed() #Kui vajutatakse spetsiifilist klahvi
 
-    # if left arrow key is pressed
-    if keys[pygame.K_LEFT] and x > 0:
-        # decrement in x co-ordinate
-        x -= vel
+    if keys[pygame.K_LEFT] and x > 0: #Kui vajutatakse vasakut klahvi
+        x -= vel #X-koordinaat väheneb
 
-    # if left arrow key is pressed
-    if keys[pygame.K_RIGHT] and x < 640 - width:
-        # increment in x co-ordinate
-        x += vel
+    
+    if keys[pygame.K_RIGHT] and x < 640 - width: #Kui vajutatakse paremat klahvi 
+        x += vel #Juurdekasv x-koordinaadis
+        
+    screen.fill((0, 0, 0)) #Teeb meie ekraani värvi täisti mustaks
 
-    # completely fill the surface object
-    # with black colour
-    screen.fill((0, 0, 0))
+    screen.blit(alus, rect) #Teeb meile siia objekti nimega alus ja ristküliku
 
-    # drawing object on screen which is rectangle here
-    screen.blit(alus, rect)
-
-    # it refreshes the window
-    pygame.display.update()
+    pygame.display.update() # Värskendab ekraani
 
 
 running = True # Muutuja "running" omistab endale True väärtuse
