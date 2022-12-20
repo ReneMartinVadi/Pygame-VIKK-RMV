@@ -1,4 +1,4 @@
-import pygame, random #Impordib pygame ja randomi
+import pygame, sys #Impordib pygame ja sysi
 from pygame.surface import Surface, SurfaceType
 
 pygame.init() #Käivitab "Pygame" mooduli
@@ -17,31 +17,45 @@ screen.blit(bg,[0,0]) #Näitab meil aknas meie lisatud tausta
 
 #Lisan punase auto
 red_car = pygame.image.load("f1_red.png") #Lisame punase auto pildi
-screen.blit(red_car, [295,390]) #Näitab meil aknas meie lisatud punast autot
 
 #Lisan sinised autod
 blue_car1 = pygame.image.load("f1_blue.png") #Lisame sinise auto pildi
-blue_car2 = pygame.image.load("f1_blue.png") #Lisame sinise auto pildi
-blue_car3 = pygame.image.load("f1_blue.png") #Lisame sinise auto pildi
-blue_car4 = pygame.image.load("f1_blue.png") #Lisame sinise auto pildi
 blue_car5 = pygame.image.load("f1_blue.png") #Lisame sinise auto pildi
-screen.blit(blue_car1, (436,258)) #anname esimesele pildile koordinaatideks x=436 ja y=258
-screen.blit(blue_car2, (400, 263)) #anname teisele pildile koordinaatideks x=400 ja y=263
-screen.blit(blue_car3, (318, 204)) #anname kolmandale pildile koordinaatideks x=318 ja y=204
-screen.blit(blue_car4, (273, 102)) #anname neljandale pildile koordinaatideks x=273 ja y=102
-screen.blit(blue_car5, (145, 75)) #anname viiendale pildile koordinaatideks x=145 ja y=75
 
-score = 0 # Muutuja score algväärtus on 0
-font = pygame.font.Font(None, 74) #Anname oma skoorile mingi  teksti fondi, mille suurus on 74px
-text = font.render(str(score), 1, white) #Lisame skoori tekstina
-screen.blit(text, (10,10)) #Näitab meie skoori mängus sees
+#Kiirus ja asukoht
+posM, posF = 295, 390
+posX, posY = 436, 258
+posL, posV = 145, 75
+speedY, speedV = 7, 5
 
-pygame.display.flip() #Värskendame ekraani
+# sulgemine hiirega
+while True:
+    sisend = pygame.event.poll()
+    if sisend.type == pygame.QUIT:
+        sys.exit()
 
-running = True # Muutuja "running" omistab endale True väärtuse
-while running: # Kuni "running" on True,
-  for event in pygame.event.get(): # Iga tsüklimuutuja väärtus "pygame.event.get()".
-    if event.type == pygame.QUIT: # Kui muutuja "event.type" on võrdeline pygame.QUIT meetodi väärtusega (akna sulgemine)
-      running = False # Muutuja "running" omistab väärtuse False.
-    if running == False: # Kui muutuja "running" väärtus on võrdeline False'ga,
-      pygame.quit() # pygame moodul suletakse.
+    # skoori lisamine ekraanile
+    score = 0 # Muutuja score algväärtus on 0
+    score2 = 0
+    font = pygame.font.Font(pygame.font.match_font('comic sans'), 16)
+    text = font.render("Vasak: " + str(score), True, [255, 255, 255])
+    screen.blit(text, [535, 20])
+
+    screen.blit(red_car, [posM, posF])  # Näitab meil aknas meie lisatud punast autot
+    screen.blit(blue_car1, (posX,posY)) #anname esimesele pildile koordinaatideks x=436 ja y=258
+    screen.blit(blue_car5, (posL, posV)) #anname viiendale pildile koordinaatideks x=145 ja y=75
+
+    # auto positsioon suureneb kiiruse võrra
+    posY += speedY
+    posV += speedV
+
+    # kui auto jõuab alla, siis läheb tagasi üles ja suurendab ühe võrra skoori
+    if posY > screenY:
+        posX, posY = 436, -233
+    if posY < -80:
+        score += 1
+
+    if posL > screenY:
+        posL, posV = 145, -75
+
+    pygame.display.flip()  # Värskendame ekraani
